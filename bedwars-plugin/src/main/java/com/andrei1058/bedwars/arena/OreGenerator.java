@@ -404,6 +404,8 @@ public class OreGenerator implements IGenerator {
         this.spawnLimit = value;
     }
 
+    public ItemStack getCustomTextureHead(String value) {
+
     private void loadDefaults() {
         switch (type) {
             case GOLD:
@@ -415,6 +417,29 @@ public class OreGenerator implements IGenerator {
                 spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_SPAWN_LIMIT) == null ?
                         "Default." + ConfigPath.GENERATOR_GOLD_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_GOLD_SPAWN_LIMIT);
                 break;
+            case LB:
+                delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_LB_DELAY) == null ?
+                        "Default." + ConfigPath.GENERATOR_LB_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_LB_DELAY);
+                ore = new ItemStack(Material.SKULL_ITEM, 1, (short)3);
+                amount = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_LB_AMOUNT) == null ?
+                        "Default." + ConfigPath.GENERATOR_LB_AMOUNT : arena.getGroup() + "." + ConfigPath.GENERATOR_LB_AMOUNT);
+                spawnLimit = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_LB_SPAWN_LIMIT) == null ?
+                        "Default." + ConfigPath.GENERATOR_LB_SPAWN_LIMIT : arena.getGroup() + "." + ConfigPath.GENERATOR_LB_SPAWN_LIMIT);
+                break;
+        SkullMeta meta = (SkullMeta) head.getItemMeta();
+        GameProfile profile = new GameProfile(UUID.randomUUID(), "");
+        profile.getProperties().put("textures", new Property("textures", eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMzNmMmNkOWY4MWEyNzcyYmRjNDg2NDQ3MmU4MzMzNjIzMTA0ODVjOGE2YmMwYjc2YjgxNzAzMzkwYTliMDMyZSJ9fX0=));
+        Field profileField = null;
+        try {
+            profileField = meta.getClass().getDeclaredField("profile");
+            profileField.setAccessible(true);
+            profileField.set(meta, profile);
+        } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
+            e.printStackTrace();
+        }
+        head.setItemMeta(meta);
+        return head;
+    }
             case IRON:
                 delay = getGeneratorsCfg().getInt(getGeneratorsCfg().getYml().get(arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_DELAY) == null ?
                         "Default." + ConfigPath.GENERATOR_IRON_DELAY : arena.getGroup() + "." + ConfigPath.GENERATOR_IRON_DELAY);
